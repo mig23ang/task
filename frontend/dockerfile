@@ -1,15 +1,30 @@
-# Dockerfile for Angular Frontend
-FROM node:18 AS build-stage
+# Etapa 1: Construcción de la app Angular
+FROM node:18 AS build
 
+# Definir el directorio de trabajo
 WORKDIR /app
-COPY package*.json ./
+
+# Copiar los archivos del proyecto al contenedor
+COPY package.json package-lock.json ./
+
+# Instalar dependencias
 RUN npm install
-COPY . ./
+
+# Copiar el resto de los archivos del proyecto
+COPY . .
+
+# Ejecutar el build de Angular
 RUN npm run build --prod
-FROM nginx:alpine AS production-stage
 
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+# Etapa 2: Servir la app con un servidor estático
+FROM nginx:alpine
 
-# Expose port 80
+# Copiar los archivos construidos desde la etapa de construcción al contenedor Nginx
+# Asegúrate de usar la ruta correcta. Usualmente es dist/<nombre_del_proyecto>
+COPY --from=build /app/dist/front /usr/share/nginx/html
+
+# Exponer el puerto 80 para el servidor web
 EXPOSE 80
+
+# Comando para iniciar Nginx
 CMD ["nginx", "-g", "daemon off;"]

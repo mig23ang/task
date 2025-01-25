@@ -1,7 +1,7 @@
-version: "3.9"
+version: '3.8'
+
 services:
   backend:
-    image: openjdk:17
     container_name: backend-service
     build:
       context: ./backend
@@ -13,23 +13,22 @@ services:
       - spring.datasource.username=postgres
       - spring.datasource.password=postgres
       - spring.datasource.driver-class-name=org.postgresql.Driver
-
     depends_on:
       - database
 
   frontend:
-    image: node:16
     container_name: frontend-service
     build:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "4200:4200"
+      - "4200:80"
     environment:
-      - ANGULAR_ENV=development
-      - apiBaseUrl = 'http://localhost:8080/api'
+      - ANGULAR_ENV=production
+      - apiBaseUrl=http://backend:8080/api
     depends_on:
       - backend
+    command: ["nginx", "-g", "daemon off;"]
 
   database:
     image: postgres:15
@@ -38,8 +37,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: task_management
-    ports:
-      - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
 

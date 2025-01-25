@@ -1,0 +1,14 @@
+# Dockerfile for Spring Boot Backend
+FROM maven:3.9.4-eclipse-temurin-17 AS build-stage
+WORKDIR /app
+
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
+FROM eclipse-temurin:17-jdk-alpine AS production-stage
+WORKDIR /app
+COPY --from=build-stage /app/target/*.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

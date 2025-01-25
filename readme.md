@@ -54,3 +54,51 @@ Para levantar el backend, ejecuta el siguiente comando en el directorio raíz de
 docker-compose up
 ```
 
+## Frontend
+El frontend de la aplicación está diseñado para interactuar con una API RESTful que se ejecuta en http://localhost:8080. Las solicitudes definidas en el archivo Postman Collection (prueba.postman_collection.json) son ejemplos de cómo el frontend puede comunicarse con esta API para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre usuarios y tareas.
+
+Solicitudes Definidas
+Crear Usuarios (crear usuarios)
+
+Método: POST
+URL: http://localhost:8080/api/users
+Cuerpo: JSON con los detalles del usuario a crear.
+Descripción: Esta solicitud se utiliza para crear un nuevo usuario en el sistema.
+
+Crear Tareas (crear tareas)
+
+Método: POST
+URL: http://localhost:8080/api/tasks
+Cuerpo: JSON con los detalles de la tarea a crear.
+Descripción: Esta solicitud se utiliza para crear una nueva tarea en el sistema.
+
+Actualizar Tarea (actualizar tarea)
+
+Método: PUT
+URL: http://localhost:8080/api/tasks/1
+Cuerpo: JSON con los detalles actualizados de la tarea.
+Descripción: Esta solicitud se utiliza para actualizar una tarea existente en el sistema.
+
+Consultar Todos los Usuarios (consultar todos los usuarios)
+
+Método: GET
+URL: http://localhost:8080/api/users/all
+Descripción: Esta solicitud se utiliza para obtener una lista de todos los usuarios en el sistema.
+
+Consultar Todas las Tareas (todas las tareas)
+
+Método: GET
+URL: http://localhost:8080/api/tasks/all
+Descripción: Esta solicitud se utiliza para obtener una lista de todas las tareas en el sistema.
+
+Consultar Tareas por Estado (todas las tareas por estado)
+
+Método: GET
+URL: http://localhost:8080/api/tasks/status/COMPLETED
+Descripción: Esta solicitud se utiliza para obtener una lista de todas las tareas con un estado específico (en este caso, COMPLETED).
+
+Consultar Tareas por Usuario (todas las tareas por usuario)
+
+Método: GET
+URL: http://localhost:8080/api/tasks/user/1
+Descripción: Esta solicitud se utiliza para obtener una lista de todas las tareas asignadas a un usuario específico (en este caso, el usuario con ID 1).

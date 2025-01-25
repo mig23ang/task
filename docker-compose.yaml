@@ -27,7 +27,7 @@ services:
       - "4200:4200"
     environment:
       - ANGULAR_ENV=development
-      - API_URL=http://localhost:8080
+      - apiBaseUrl = 'http://localhost:8080/api'
     depends_on:
       - backend
 

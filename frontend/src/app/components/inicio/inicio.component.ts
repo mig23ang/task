@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-import { CreatedUsersComponent } from '../created-users/created-users.component';
+import { RouterModule, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [
-    CreatedUsersComponent
-  ],
+  imports: [],
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.scss'
 })

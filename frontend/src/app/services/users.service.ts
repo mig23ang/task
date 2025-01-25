@@ -7,12 +7,15 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class UsersService {
+
+
   private readonly baseUrl = environment.apiBaseUrl + '/users';
 
   constructor(private http: HttpClient) {}
 
-  // Crear un usuario
+
   createUser(user: any): Observable<any> {
+    console.log('Creando usuario', user);
     return this.http.post(`${this.baseUrl}`, user);
   }
 

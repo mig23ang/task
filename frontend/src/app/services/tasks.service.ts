@@ -25,6 +25,10 @@ export class TasksService {
   getAllTasks(): Observable<any> {
     return this.http.get(`${this.baseUrl}/all`);
   }
+  // Obtener una tarea por id
+  getTask(taskId: any): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${taskId}`);
+  }
 
   // Obtener tareas por estado
   getTasksByStatus(status: string): Observable<any> {

@@ -1,0 +1,81 @@
+<div class="container mt-4">
+  <h2>Filtrar Tareas</h2>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Formulario de filtros -->
+  <div class="mb-4">
+    <div class="row g-2">
+      <!-- Filtro por usuario -->
+      <div class="col-md-6">
+        <label for="userId" class="form-label">Filtrar por Usuario (ID)</label>
+        <input
+          type="number"
+          id="userId"
+          class="form-control"
+          [(ngModel)]="userId"
+          placeholder="ID del usuario"
+        />
+        <button class="btn btn-primary mt-2" (click)="loadTasksByUser()">
+          Buscar por Usuario
+        </button>
+      </div>
+
+      <!-- Filtro por estado -->
+      <div class="col-md-6">
+        <label for="status" class="form-label">Filtrar por Estado</label>
+        <select id="status" class="form-control" [(ngModel)]="status">
+          <option value="" disabled selected>Seleccionar estado</option>
+          <option value="PENDING">PENDING</option>
+          <option value="COMPLETED">COMPLETED</option>
+          <option value="IN_PROGRESS">IN_PROGRESS</option>
+        </select>
+        <button class="btn btn-primary mt-2" (click)="loadTasksByStatus()">
+          Buscar por Estado
+        </button>
+      </div>
+    </div>
+    <button class="btn btn-secondary mt-3" (click)="clearFilters()">
+      Limpiar
+    </button>
+  </div>
+
+  <!-- Tabla de resultados -->
+  <h2 class="mt-4">Resultados</h2>
+  <div *ngIf="tasks.length > 0; else noTasks">
+    <table class="table table-bordered">
+      <thead class="thead-light">
+        <tr>
+          <th>#</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+          <th>Prioridad</th>
+          <th>Asignado a (ID)</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ task.description }}</td>
+          <td>{{ task.status }}</td>
+          <td>{{ task.priority }}</td>
+          <td>{{ task.assignedTo?.id || "No asignado" }}</td>
+          <td>
+            <button class="btn btn-primary btn-sm" (click)="editTask(task.id)">
+              Editar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Mensaje cuando no hay tareas -->
+  <ng-template #noTasks>
+    <p class="text-muted">No hay tareas disponibles para mostrar.</p>
+  </ng-template>
+</div>

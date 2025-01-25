@@ -1,0 +1,73 @@
+<div class="container mt-4">
+  <h2>Crear Tarea</h2>
+
+  <!-- Mensajes de éxito o error -->
+  <div *ngIf="successMessage" class="alert alert-success" role="alert">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Formulario para crear tareas -->
+  <form (ngSubmit)="onSubmit()">
+    <!-- Campo para la descripción -->
+    <div class="mb-3">
+      <label for="description" class="form-label">Descripción</label>
+      <textarea
+        id="description"
+        class="form-control"
+        [(ngModel)]="task.description"
+        name="description"
+        required
+      ></textarea>
+    </div>
+
+    <!-- Campo para el estado -->
+    <div class="mb-3">
+      <label for="status" class="form-label">Estado</label>
+      <select
+        id="status"
+        class="form-control"
+        [(ngModel)]="task.status"
+        name="status"
+        required
+      >
+        <option value="PENDING">PENDIENTE</option>
+        <option value="IN_PROGRESS">EN PROGRESO</option>
+        <option value="COMPLETED">COMPLETADO</option>
+      </select>
+    </div>
+
+    <!-- Campo para la prioridad -->
+    <div class="mb-3">
+      <label for="priority" class="form-label">Prioridad</label>
+      <select
+        id="priority"
+        class="form-control"
+        [(ngModel)]="task.priority"
+        name="priority"
+        required
+      >
+        <option value="LOW">BAJA</option>
+        <option value="MEDIUM">MEDIA</option>
+        <option value="HIGH">ALTA</option>
+      </select>
+    </div>
+
+    <!-- Campo para asignar usuario -->
+    <div class="mb-3">
+      <label for="assignedTo" class="form-label">ID del Usuario Asignado</label>
+      <input
+        type="number"
+        id="assignedTo"
+        class="form-control"
+        [(ngModel)]="task.assignedTo.id"
+        name="assignedTo"
+        required
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Crear Tarea</button>
+  </form>
+</div>

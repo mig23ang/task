@@ -1,10 +1,12 @@
 package task.management.backend.services;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import task.management.backend.factory.TaskFactory;
 import task.management.backend.model.Task;
 import task.management.backend.model.User;
 import task.management.backend.observer.TaskObservable;
@@ -38,19 +40,27 @@ public class TaskService {
         taskObservable.addObserver(techLeadNotifier);
     }
 
+    @Transactional
     public Task createTask(Task task) {
-        logger.info("Inicio de creación de tarea en TaskService");
 
-        if (task.getAssignedTo() != null && task.getAssignedTo().getId() != null) {
-            Long userId = task.getAssignedTo().getId();
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+        logger.info("Creando tarea en TaskService");
 
-            task.setAssignedTo(user);
-        }
+        Task newTask = TaskFactory.createTask(
+                task.getDescription(),
+                task.getStatus().toString(),
+                task.getPriority().toString(),
+                task.getAssignedTo().getId(),
+                userRepository
+        );
 
-        return taskRepository.save(task);
+
+        Task savedTask = taskRepository.save(newTask);
+        logger.info("Tarea creada con éxito: " + savedTask);
+        taskObservable.notifyTaskCompleted(savedTask);
+
+        return savedTask;
     }
+
 
     public Task updateTaskStatus(Long taskId, Task updateTask) {
         logger.info("Inicio de actualizar la tarea en TaskService");

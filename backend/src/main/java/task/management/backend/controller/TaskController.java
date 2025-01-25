@@ -8,6 +8,7 @@ import task.management.backend.model.Task;
 import task.management.backend.services.TaskService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -31,12 +32,19 @@ public class TaskController {
         return taskService.updateTaskStatus(id, task);
     }
 
+    @GetMapping("/{id}")
+    public Optional<Task> getTask(@PathVariable Long id) {
+        logger.info("Inicio de actualizar la tarea en TaskController");
+        return taskService.getTask(id);
+    }
+
 
     @GetMapping("/status/{status}")
     public List<Task> getTasksByStatus(@PathVariable Task.Status status) {
         logger.info("Obteniendo tareas con estado: " + status);
         return taskService.getTasksByStatus(status);
     }
+
     //obtener tareas por usuario
     @GetMapping("/user/{userId}")
     public List<Task> getTasksByUser(@PathVariable Long userId) {

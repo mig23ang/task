@@ -13,6 +13,7 @@ import task.management.backend.repository.TaskRepository;
 import task.management.backend.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskService {
@@ -83,5 +84,10 @@ public class TaskService {
     public List<Task> getTasksByUserId(Long userId) {
         logger.info("Inicio de obtener tareas por usuario en TaskService");
         return taskRepository.findByAssignedToId(userId);
+    }
+
+    public Optional<Task> getTask(Long id) {
+        logger.info("Inicio de obtener tarea por id en TaskService");
+        return taskRepository.findById(id);
     }
 }

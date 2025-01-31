@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import task.management.backend.factory.TaskFactory;
 import task.management.backend.model.Task;
-import task.management.backend.model.User;
 import task.management.backend.observer.TaskObservable;
 import task.management.backend.observer.TechLeadNotifier;
 import task.management.backend.repository.TaskRepository;
 import task.management.backend.repository.UserRepository;
+import task.management.backend.utils.ApplicationException;
 
 import java.util.List;
 import java.util.Optional;
@@ -65,7 +65,7 @@ public class TaskService {
     public Task updateTaskStatus(Long taskId, Task updateTask) {
         logger.info("Inicio de actualizar la tarea en TaskService");
 
-        Task taskConsulada = taskRepository.findById(taskId).orElseThrow(() -> new RuntimeException("Task not found"));
+        Task taskConsulada = taskRepository.findById(taskId).orElseThrow(() -> new ApplicationException("TASK_NOT_FOUND","404"));
 
         logger.info("Estado antes de actualizar: " + taskConsulada.getStatus());
 

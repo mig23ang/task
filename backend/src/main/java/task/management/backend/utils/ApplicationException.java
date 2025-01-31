@@ -4,11 +4,17 @@ import lombok.Getter;
 
 @Getter
 public class ApplicationException extends RuntimeException {
-    private final String errorCode;
+    private String message;
+    private String errorCode;
+
 
     public ApplicationException(String message, String errorCode) {
         super(message);
+        this.message = message;
         this.errorCode = errorCode;
     }
 
+    public String getFormattedMessage() {
+        return String.format("Error %s: %s", errorCode, message);
+    }
 }

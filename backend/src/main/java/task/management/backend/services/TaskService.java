@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import task.management.backend.factory.TaskFactory;
 import task.management.backend.model.Task;
@@ -45,27 +46,34 @@ public class TaskService {
 
         logger.info("Creando tarea en TaskService");
 
-        Task newTask = TaskFactory.createTask(
-                task.getDescription(),
-                task.getStatus().toString(),
-                task.getPriority().toString(),
-                task.getAssignedTo().getId(),
-                userRepository
-        );
+        try {
+            Task newTask = TaskFactory.createTask(
+                    task.getDescription(),
+                    task.getStatus().toString(),
+                    task.getPriority().toString(),
+                    task.getAssignedTo().getId(),
+                    userRepository
+            );
 
+            Task savedTask = taskRepository.save(newTask);
+            logger.info("Tarea creada con éxito: " + savedTask);
+            taskObservable.notifyTaskCompleted(savedTask);
 
-        Task savedTask = taskRepository.save(newTask);
-        logger.info("Tarea creada con éxito: " + savedTask);
-        taskObservable.notifyTaskCompleted(savedTask);
+            return savedTask;
 
-        return savedTask;
+        } catch (DataIntegrityViolationException ex) {
+            logger.error("Error de violación de datos: " + ex.getMessage(), ex);
+            throw new ApplicationException("No se pudo crear la tarea debido a un error de datos.", "task.creation.error");
+        } catch (Exception ex) {
+            logger.error("Error inesperado al crear tarea", ex);
+            throw new ApplicationException("Ocurrió un error inesperado al crear la tarea.", "task.creation.failed");
+        }
     }
-
 
     public Task updateTaskStatus(Long taskId, Task updateTask) {
         logger.info("Inicio de actualizar la tarea en TaskService");
 
-        Task taskConsulada = taskRepository.findById(taskId).orElseThrow(() -> new ApplicationException("TASK_NOT_FOUND","404"));
+        Task taskConsulada = taskRepository.findById(taskId).orElseThrow(() -> new ApplicationException("TASK_NOT_FOUND", "404"));
 
         logger.info("Estado antes de actualizar: " + taskConsulada.getStatus());
 
@@ -84,12 +92,10 @@ public class TaskService {
         return updatedTask;
     }
 
-
     public List<Task> getTasksByStatus(Task.Status status) {
         logger.info("Consultando tareas con estado: " + status);
         return taskRepository.findByStatus(status);
     }
-
 
     public List<Task> getTasksByUserId(Long userId) {
         logger.info("Inicio de obtener tareas por usuario en TaskService");

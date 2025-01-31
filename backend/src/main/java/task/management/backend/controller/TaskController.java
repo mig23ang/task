@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import task.management.backend.model.Task;
 import task.management.backend.services.TaskService;
 import task.management.backend.utils.ApplicationException;
+import task.management.backend.utils.Validator;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,8 +24,12 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    Validator validator;
+
     @PostMapping
     public ResponseEntity<Task> createTask(@Valid @RequestBody Task task) {
+        validator.validateCreateTask(task);
         logger.info("Inicio de creación de tarea en TaskController");
         try {
             Task createdTask = taskService.createTask(task);

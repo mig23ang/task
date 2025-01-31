@@ -9,26 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ApplicationException.class)
-    public ResponseEntity<ErrorResponse> handleApplicationException(ApplicationException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), ex.getErrorCode());
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    static class ErrorResponse {
-        private String message;
-        private String errorCode;
-
-        public ErrorResponse(String message, String errorCode) {
-            this.message = message;
-            this.errorCode = errorCode;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public String getErrorCode() {
-            return errorCode;
-        }
+    public ResponseEntity<String> handleApplicationException(ApplicationException ex) {
+        return new ResponseEntity<>(ex.getFormattedMessage(), HttpStatus.BAD_REQUEST);
     }
 }
